@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
-
+import { createBlogInput, updateBlogInput } from "@jainam-b/medium-comman";
 import { sign, verify } from "hono/jwt";
 
 export const blogRouter = new Hono<{
@@ -33,6 +33,7 @@ blogRouter.use("/*", async (c, next) => {
 
 blogRouter.post("/", async (c) => {
   const body = await c.req.json();
+  const {success} =createBlogInput.safeParse(body)
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
@@ -52,6 +53,7 @@ blogRouter.post("/", async (c) => {
 
 blogRouter.put("/", async (c) => {
   const body = await c.req.json();
+  const {success}=updateBlogInput.safeParse(body)
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
@@ -72,7 +74,6 @@ blogRouter.put("/", async (c) => {
   });
 });
 
-
 // Todo : add pagination
 blogRouter.get("/bulk", async (c) => {
   const prisma = new PrismaClient({
@@ -86,7 +87,7 @@ blogRouter.get("/bulk", async (c) => {
 });
 
 blogRouter.get("/:id", async (c) => {
-  const id =  c.req.param("id");
+  const id = c.req.param("id");
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
@@ -108,8 +109,5 @@ blogRouter.get("/:id", async (c) => {
     });
   }
 });
-
-
-
 
 // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZlYzExZmQ0LTllMmYtNDk4NS1iYjQxLTRmMTFhYWI5MzczMCJ9.I2JasKBSe6OkIUKWs6s7ToDTsHO2NOQuw0ef3bapio0

@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
-import { signupInput } from "../zod/zod"
+import { signupInput , signinInput} from "@jainam-b/medium-comman"
 import { sign, verify } from "hono/jwt";
 import bcrypt from "bcryptjs";
 
@@ -49,6 +49,7 @@ userRouter.post("/signin", async (c) => {
   }).$extends(withAccelerate());
 
   const body = await c.req.json();
+  const {success} = signinInput.safeParse(body)
   try {
     const user = await prisma.user.findUnique({
       where: {
