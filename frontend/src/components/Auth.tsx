@@ -1,14 +1,29 @@
 import { ChangeEvent, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { SingupInput } from "@jainam-b/medium-comman";
 import Signin from "../pages/Signin";
+import axios from "axios";
+import { BACKEND_URL } from "../config";
 
 const Auth = ({ type }: { type: "signup" | "signin" }) => {
+  const navigate= useNavigate();
   const [postInputs, setPostInputs] = useState<SingupInput>({
     name: "",
     username: "",
     password: "",
   });
+
+  async function sendRequest() {
+  try {
+    const response=await axios.post(`${BACKEND_URL}/api/v1/user/${type==="signup"?"signup":"signin"}`,postInputs)
+    const jwt=response.data;
+    localStorage.setItem("token",jwt)
+    navigate("/blogs")
+  } catch (error) {
+    
+  }
+  }
+
   return (
     <div className="h-screen flex justify-center flex-col">
       <div className="flex justify-center ">
@@ -16,31 +31,37 @@ const Auth = ({ type }: { type: "signup" | "signin" }) => {
           <div className="px-10">
             <div className="text-5xl font-bold">Create an account</div>
             <div className="text-xl text-center text-slate-500">
-              {type==="signin"?"Don't have an account":"Already have an account?"}
-              <Link className="pl-2 underline" to={type==="signin"?"/signup":"/signin" }>
-                {type==="signin"?"Sign up":"Sign    in" }
+              {type === "signin"
+                ? "Don't have an account"
+                : "Already have an account?"}
+              <Link
+                className="pl-2 underline"
+                to={type === "signin" ? "/signup" : "/signin"}
+              >
+                {type === "signin" ? "Sign up" : "Sign    in"}
               </Link>
             </div>
           </div>
           <div className="pt-8">
-            <LabelledInput
-              label="Username"
-              placeholder="Enter the username"
-              onChange={(e) => {
-                setPostInputs({
-                  ...postInputs,
-                  name: e.target.value,
-                });
-              }}
-            />
-
+             {type === "signup" ? (
+              <LabelledInput
+                label="Username"
+                placeholder="Enter the username"
+                onChange={(e) => {
+                  setPostInputs({
+                    ...postInputs,
+                    name: e.target.value,
+                  });
+                }}
+              />
+            ) : null} 
             <LabelledInput
               label="Email"
               placeholder="Enter Email"
               onChange={(e) => {
                 setPostInputs({
                   ...postInputs,
-                  name: e.target.value,
+                  username: e.target.value,
                 });
               }}
             />
@@ -51,11 +72,17 @@ const Auth = ({ type }: { type: "signup" | "signin" }) => {
               onChange={(e) => {
                 setPostInputs({
                   ...postInputs,
-                  name: e.target.value,
+                  password: e.target.value,
                 });
               }}
             />
-            <button type="button" className="mt-5 text-white bg-gray-800 hover:bg-gray-900 w-full focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-lg px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">{type ==="signup"? "Sign up" : "Sign in"}</button>
+            <button
+            onClick={sendRequest}
+              type="button"
+              className="mt-5 text-white bg-gray-800 hover:bg-gray-900 w-full focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-lg px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+            >
+              {type === "signup" ? "Sign up" : "Sign in"}
+            </button>
           </div>
         </div>
       </div>
