@@ -16,18 +16,23 @@ export const blogRouter = new Hono<{
 
 // MIDDLEWARE
 blogRouter.use("/*", async (c, next) => {
-  const header = c.req.header("authorization") || "";
-  const token = header.split(" ")[1] || "";
-  const user = await verify(token, c.env.JWT_SECRET);
-  if (user) {
-    const userId = (user as { id: string }).id;
-    c.set("userId", userId);
-    await next();
-  } else {
-    c.status(403);
-    c.json({
-      error: "Unauthorized access",
-    });
+  const authHeader = c.req.header("authorization") || "";
+  try {
+      const user = await verify(authHeader, c.env.JWT_SECRET);
+      if (user) {
+          (c as any ).set("userId", user.id);
+          await next();
+      } else {
+          c.status(403);
+          return c.json({
+              message: "You are not logged in"
+          })
+      }
+  } catch(e) {
+      c.status(403);
+      return c.json({
+          message: "You are not logged in"
+      })
   }
 });
 
@@ -42,7 +47,7 @@ blogRouter.post("/", async (c) => {
     data: {
       title: body.title,
       content: body.content,
-      authorId: userId,
+      authorId: parseInt(userId),
     },
   });
 
@@ -65,7 +70,7 @@ blogRouter.put("/", async (c) => {
     data: {
       title: body.title,
       content: body.content,
-      id: userId,
+      id: parseInt(userId),
     },
   });
 
@@ -80,7 +85,19 @@ blogRouter.get("/bulk", async (c) => {
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
 
-  const blogs = await prisma.blog.findMany();
+  const blogs = await prisma.blog.findMany({
+    select:{
+      content:true,
+      title:true,
+      id:true,
+      author:{
+        select:{
+          name:true
+        }
+      }
+
+    }
+  });
   return c.json({
     blogs,
   });
@@ -95,7 +112,7 @@ blogRouter.get("/:id", async (c) => {
   try {
     const blog = await prisma.blog.findFirst({
       where: {
-        authorId: id,
+        authorId: parseInt(id),
       },
     });
 
@@ -110,4 +127,4 @@ blogRouter.get("/:id", async (c) => {
   }
 });
 
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZlYzExZmQ0LTllMmYtNDk4NS1iYjQxLTRmMTFhYWI5MzczMCJ9.I2JasKBSe6OkIUKWs6s7ToDTsHO2NOQuw0ef3bapio0
+
