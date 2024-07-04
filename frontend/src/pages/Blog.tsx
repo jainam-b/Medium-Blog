@@ -1,13 +1,19 @@
-import React from 'react'
+import React from "react";
+import { useBlog } from "../hooks";
+import { useParams } from "react-router-dom";
 
 const Blog = () => {
-  return (
-    <div>
-     blog
+  const { id } = useParams();
+    const {loading, blog} = useBlog({
+        id: id || ""
+    });
 
-    </div>
-  )
-}
+  if (loading) {
+    return <div>Loading ...</div>;
+  }
+  return <div>
+    blog details
+  </div>;
+};
 
-export default Blog
-
+export default Blog;
