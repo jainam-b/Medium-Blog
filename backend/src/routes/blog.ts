@@ -11,6 +11,7 @@ export const blogRouter = new Hono<{
     }, 
     Variables: {
         userId: string;
+        
     }
 }>();
 
@@ -25,15 +26,16 @@ blogRouter.use("/*", async (c, next) => {
             c.status(403);
             return c.json({
                 message: "You are not logged in"
-            })
+            });
         }
-    } catch(e) {
+    } catch (e) {
         c.status(403);
         return c.json({
             message: "You are not logged in"
-        })
+        });
     }
 });
+
 
 blogRouter.post('/', async (c) => {
     const body = await c.req.json();
