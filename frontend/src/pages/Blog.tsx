@@ -1,6 +1,6 @@
 // this page is used to display the blog with some css and
-import React from "react";
-import { useBlog, useBlogs } from "../hooks";
+ 
+import { useBlog } from "../hooks";
 import { useParams } from "react-router-dom";
 import FullBlog from "../components/FullBlog";
 import Spinner from "../components/Spinner";
@@ -12,7 +12,7 @@ const Blog = () => {
     id: id || "",
   });
 
-  if (loading) {
+  if (loading || !blog ) {
     return (
       <div> <AppBar/>
       <div className="flex justify-center flex-col h-screen ">

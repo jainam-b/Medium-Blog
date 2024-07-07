@@ -1,4 +1,4 @@
-import React from "react";
+ 
 import AppBar from "./AppBar";
 import { Blog } from "../hooks";
 import { Avatar } from "./BlogCard";
@@ -39,16 +39,4 @@ const FullBlog = ({ blog }: { blog: Blog }) => {
 
 export default FullBlog;
 
-// export function BlogAvatar({ name }: { name: string }) {
-//   return (
-//     <div>
-//       <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-//         <div className="relative inline-flex items-center justify-center w-7 h-7 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
-//           <span className="font-medium text-gray-600 dark:text-gray-300">
-//             {name[0]}
-//           </span>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
+ 

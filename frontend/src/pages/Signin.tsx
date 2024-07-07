@@ -1,4 +1,4 @@
-import React from 'react'
+ 
 import Qoute from "../components/Qoute";
 import Auth from "../components/Auth";
 const Signin = () => {
