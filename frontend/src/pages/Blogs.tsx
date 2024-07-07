@@ -2,19 +2,31 @@ import React from "react";
 import BlogCard from "../components/BlogCard";
 import AppBar from "../components/AppBar";
 import { useBlogs } from "../hooks";
+import BlogSketon from "../components/BlogSketon";
 
 const Blogs = () => {
   const { loading, blogs } = useBlogs();
 
   if (loading) {
-    return <div>Loading</div>;
+    return <div>
+      <div>
+        <AppBar/>
+      </div>
+      <div className="flex justify-center mt-5">
+          <div>
+          <BlogSketon />
+            <BlogSketon />
+            <BlogSketon />
+          </div>
+      </div>
+      </div>      
   }
   return (
     <div>
       <div>
         <AppBar />
       </div>
-      <div className="flex justify-center">
+      <div className="flex justify-center mt-5">
         <div >
         {blogs.map(blog => <BlogCard
                    id={blog.id}
