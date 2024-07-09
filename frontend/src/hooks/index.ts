@@ -12,6 +12,24 @@ export interface Blog {
     }
 }
 
+export const useUsername = () => {
+    const [name, setName] = useState("");
+
+    useEffect(() => {
+        axios.get(`${BACKEND_URL}/api/v1/user/details`, {
+            headers: {
+                Authorization: localStorage.getItem("token")
+            }
+        }).then(response => {
+            setName(response.data.username.name || "");
+             
+        }).catch(error => {
+            console.error("Error fetching user details:", error);
+        });
+    }, [name]); // Empty dependency array to run only once on mount
+
+    return name;
+}
 export const useBlog = ({ id }: { id: string }) => {
     const [loading, setLoading] = useState(true);
     const [blog, setBlog] = useState<Blog>();
