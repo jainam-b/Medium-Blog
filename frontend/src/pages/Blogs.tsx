@@ -14,9 +14,11 @@ const Blogs = () => {
       </div>
       <div className="flex justify-center mt-5">
           <div>
-          <BlogSketon />
-            <BlogSketon />
-            <BlogSketon />
+           <BlogSketon/>
+           <BlogSketon/>
+
+           <BlogSketon/>
+
           </div>
       </div>
       </div>      

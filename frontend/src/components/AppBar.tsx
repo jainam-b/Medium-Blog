@@ -3,12 +3,13 @@ import { useUsername } from "../hooks";
 
 const AppBar = () => {
   const name = useUsername();
-  console.log('Username:',name);
 
   // Ensure name is a string and get the first letter
-  const firstLetter = typeof name === 'string' && name.length > 0 ? name.charAt(0).toUpperCase() : ' ';
-  console.log('First letter:', firstLetter);
-  
+  const firstLetter =
+    typeof name === "string" && name.length > 0
+      ? name.charAt(0).toUpperCase()
+      : " ";
+
   return (
     <div>
       <nav className="bg-white border-gray-200 dark:bg-gray-900">
