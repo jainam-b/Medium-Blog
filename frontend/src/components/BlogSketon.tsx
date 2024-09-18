@@ -1,4 +1,4 @@
-import { Circle } from "./BlogCard"
+
 
 export const BlogSkeleton = () => {
     return <div role="status" className="animate-pulse">

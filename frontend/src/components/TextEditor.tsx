@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useCallback } from "react";
-import EditorJS, { OutputData, API, LogLevels } from "@editorjs/editorjs";
+import EditorJS, {  LogLevels } from "@editorjs/editorjs";
 import Header from "@editorjs/header";
 import List from "@editorjs/list";
 import InlineCode from '@editorjs/inline-code';
@@ -18,14 +18,7 @@ export const TextEditor: React.FC<TextEditorProps> = React.memo(({ onChange }) =
         holder: editorRef.current,
         placeholder: "Write your article here...",
         tools: {
-          header: {
-            class: Header,
-            config: {
-              placeholder: 'Enter a header',
-              levels: [2, 3, 4],
-              defaultLevel: 3,
-            }, 
-          }, // Closing the header tool configuration
+          header: Header,
           list: List,     // Adding the List tool
           inlineCode: {
             class: InlineCode,
