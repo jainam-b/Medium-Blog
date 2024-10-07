@@ -1,6 +1,6 @@
 import AppBar from "./AppBar";
 import { Blog } from "../hooks";
-import { Avatar } from "./BlogCard";
+
 import React from "react";
 
 const renderBlock = (block: any) => {
